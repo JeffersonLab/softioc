@@ -1,5 +1,12 @@
 # softioc
 Docker image of an EPICS CA softioc
 
-## Build Image
-```docker build -t softioc .```
+## Build
+````
+docker build -t softioc .
+````
+
+## Run 
+```
+docker run --name softioc --rm -p 5064:5064 -p 5064:5064/udp -p 5065:5065 -p 5065:5065/udp -dit -v ./examples:/epics/softioc softioc
+```
