@@ -26,7 +26,8 @@ RUN cd $WORK_DIR \
     && $WORK_DIR/base/bin/linux-x86_64/makeBaseApp.pl -i ioc -a linux-x86_64 softioc \
     && make \
     && yum remove -y wget gcc-c++ readline-devel perl-devel make \
-    && echo "cd $WORK_DIR/softioc/iocBoot/softioc && ../../bin/linux-x86_64/softioc st.cmd" >> /usr/local/bin/start.sh
+    && echo "cd $WORK_DIR/softioc/iocBoot/softioc && ../../bin/linux-x86_64/softioc st.cmd" >> /usr/local/bin/start.sh \
+    && chmod +x /usr/local/bin/start.sh
 
 EXPOSE 5065 5064
 
