@@ -1,23 +1,24 @@
-FROM alpine:latest
+FROM centos:8
 
-# Maybe we can figure out how to build epics-base from Jenkins?  https://jenkins.aps.anl.gov/job/epics-base-3.15/503/consoleFull
-RUN apk --no-cache add libstdc++ readline \
-  && apk --no-cache add --virtual .build-deps cmake g++ make perl-dev readline-dev \
-  && mkdir /epics/ \
-  && cd /epics/ \
-  && wget --no-check-certificate --quiet https://epics.anl.gov/download/base/base-3.16.2.tar.gz -O EPICS.tar.gz \
-  && tar xzf EPICS.tar.gz \
-  && mv base-*/ base/ \
-  && rm EPICS.tar.gz \
-  && cd /epics/base \
-  && export EPICS_BASE=/epics/base/ \
-  && export EPICS_HOST_ARCH='linux-x86_64' \
-  && make -j4 CFLAGS="-DIPPORT_USERRESERVED=5000 -fPIC" CXXFLAGS="-DIPPORT_USERRESERVED=5000 -fPIC" \
-  && make clean \
-  && mkdir /epics/softioc \
-  && makeBaseApp.pl -t softioc -i -a linux-x86_64 softioc \
-  && apk del --purge .build-deps
+ENV EPICS_VER 3.15.8
+ENV WORK_DIR /usr/local/epics
+ENV USER epics
+
+# Note: Perl complains about the locale a million times.   Can't figure out a way to tell it to shut up and just use en_us.UTF8
+RUN yum install -y wget gcc-c++ readline-devel perl-devel make \
+    && wget --no-check-certificate https://www.aps.anl.gov/epics/download/base/base-$EPICS_VER.tar.gz \
+    && tar -zxvf base-$EPICS_VER.tar.gz \
+    && mkdir $WORK_DIR \
+    && mv base-$EPICS_VER $WORK_DIR \
+    && rm base-$EPICS_VER.tar.gz \
+    && cd $WORK_DIR \
+    && ln -s base-$EPICS_VER base \
+    && echo "export EPICS_HOST_ARCH=linux-x86_64" >> ~/.bashrc \
+    && echo "export EPICS_BASE="$WORK_DIR"/base" >> ~/.bashrc \
+    && echo "export PATH=$PATH:"$WORK_DIR"/base/bin/linux-x86_64" >> ~/.bashrc \
+    && source ~/.bashrc \
+    && cd $WORK_DIR/base \
+    && make \
+    && yum remove -y wget gcc-c++ readline-devel perl-devel make
 
 EXPOSE 5065 5064
-
-ENV PATH $PATH:/epics/base/bin/linux-x86_64/
