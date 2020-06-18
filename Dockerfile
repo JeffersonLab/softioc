@@ -1,8 +1,11 @@
 FROM centos:8
 
-ENV EPICS_VER 3.15.8
-ENV WORK_DIR /usr/local/epics
-ENV USER epics
+ENV EPICS_VER=3.15.8 \
+    WORK_DIR=/usr/local/epics \
+    USER=epics \
+    EPICS_BASE="$WORK_DIR"/base \
+    EPICS_HOST_ARCH=linux-x86_64 \
+    PATH=$PATH:"$WORK_DIR"/base/bin/linux-x86_64
 
 # Note: Perl complains about the locale a million times.   Can't figure out a way to tell it to shut up and just use en_us.UTF8
 RUN yum install -y wget gcc-c++ readline-devel perl-devel make \
@@ -13,17 +16,14 @@ RUN yum install -y wget gcc-c++ readline-devel perl-devel make \
     && rm base-$EPICS_VER.tar.gz \
     && cd $WORK_DIR \
     && ln -s base-$EPICS_VER base \
-    && echo "export EPICS_HOST_ARCH=linux-x86_64" >> ~/.bashrc \
-    && echo "export EPICS_BASE="$WORK_DIR"/base" >> ~/.bashrc \
-    && echo "export PATH=$PATH:"$WORK_DIR"/base/bin/linux-x86_64" >> ~/.bashrc \
-    && source ~/.bashrc \
     && cd $WORK_DIR/base \
-    && make \
-    && cd $WORK_DIR \
+    && make
+
+RUN cd $WORK_DIR \
     && mkdir softioc \
     && cd softioc \
-    && makeBaseApp.pl -t softioc -a linux-x86_64 softioc \
-    && makeBaseApp.pl -i softioc -a linux-x86_64 softioc \
+    && $WORK_DIR/base/bin/linux-x86_64/makeBaseApp.pl -t ioc -a linux-x86_64 softioc \
+    && $WORK_DIR/base/bin/linux-x86_64/makeBaseApp.pl -i ioc -a linux-x86_64 softioc \
     && make \
     && yum remove -y wget gcc-c++ readline-devel perl-devel make \
     && echo "cd $WORK_DIR/softioc/iocBoot/softioc && ../../bin/linux-x86_64/softioc st.cmd" >> /usr/local/bin/start.sh
