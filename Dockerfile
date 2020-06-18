@@ -19,6 +19,15 @@ RUN yum install -y wget gcc-c++ readline-devel perl-devel make \
     && source ~/.bashrc \
     && cd $WORK_DIR/base \
     && make \
-    && yum remove -y wget gcc-c++ readline-devel perl-devel make
+    && cd $WORK_DIR \
+    && mkdir softioc \
+    && cd softioc \
+    && makeBaseApp.pl -t softioc -a linux-x86_64 softioc \
+    && makeBaseApp.pl -i softioc -a linux-x86_64 softioc \
+    && make \
+    && yum remove -y wget gcc-c++ readline-devel perl-devel make \
+    && echo "cd $WORK_DIR/softioc/iocBoot/softioc && ../../bin/linux-x86_64/softioc st.cmd" >> /usr/local/bin/start.sh
 
 EXPOSE 5065 5064
+
+CMD ["/usr/local/bin/start.sh"]
