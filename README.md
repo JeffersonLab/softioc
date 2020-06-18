@@ -10,3 +10,11 @@ docker build -t softioc .
 ```
 docker run --name softioc --rm -p 5064:5064 -p 5064:5064/udp -p 5065:5065 -p 5065:5065/udp -dit -v ./examples/hello:/user/local/epics/softioc/db softioc
 ```
+## Monitor
+```
+camonitor hello
+```
+## Put
+```
+caput hello 1
+```
