@@ -6,7 +6,7 @@ Use a volume to provide your own IOC database (or use one of the provided exampl
 ```
 services:
   softioc:
-    image: slominskir/softioc:1.0.0
+    image: slominskir/softioc:latest
     hostname: softioc
     container_name: softioc
     ports:
