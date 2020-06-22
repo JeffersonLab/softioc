@@ -1,11 +1,12 @@
 FROM centos:8
 
+ENV WORK_DIR=/usr/local/epics
+
 ENV EPICS_VER=3.15.8 \
-    WORK_DIR=/usr/local/epics \
     USER=epics \
-    EPICS_BASE="$WORK_DIR"/base \
+    EPICS_BASE=$WORK_DIR/base \
     EPICS_HOST_ARCH=linux-x86_64 \
-    PATH=$PATH:"$WORK_DIR"/base/bin/linux-x86_64
+    PATH=$PATH:$WORK_DIR/base/bin/linux-x86_64
 
 # Note: Perl complains about the locale a million times.   Can't figure out a way to tell it to shut up and just use en_us.UTF8
 RUN yum install -y wget gcc-c++ readline-devel perl-devel make \
@@ -31,4 +32,4 @@ RUN cd $WORK_DIR \
 
 EXPOSE 5065 5064
 
-CMD ["/usr/local/bin/start.sh"]
+#CMD ["/usr/local/bin/start.sh"]
