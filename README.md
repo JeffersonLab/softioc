@@ -23,7 +23,7 @@ docker build -t softioc .
 
 ## Run 
 ```
-docker run --name softioc --rm -p 5064:5064 -p 5064:5064/udp -p 5065:5065 -p 5065:5065/udp -dit -v $(pwd)/examples/hello:/usr/local/epics/softioc/db softioc
+docker run --name softioc --rm -p 5064:5064 -p 5064:5064/udp -p 5065:5065 -p 5065:5065/udp -dit -v $(pwd)/examples/hello:/db softioc
 ```
 **Note**: Turns out there is no cross-platform way to specify a relative path with a bind mount [Docker CLI Issue 1203](https://github.com/docker/cli/issues/1203).  You may need to replace $(pwd) with the absolute path (or perhaps %cd% on Windows).  This problem is only with "docker run"; Docker compose doesn't have this issue.
 
