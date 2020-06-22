@@ -1,5 +1,6 @@
 FROM centos:8
 
+# Defined in separate layer so it can be nested in another ENV
 ENV WORK_DIR=/usr/local/epics
 
 ENV EPICS_VER=3.15.8 \
@@ -30,6 +31,9 @@ RUN cd $WORK_DIR \
     && echo "cd $WORK_DIR/softioc/iocBoot/softioc && ../../bin/linux-x86_64/softioc st.cmd" >> /usr/local/bin/start.sh \
     && chmod +x /usr/local/bin/start.sh
 
+RUN mkdir /db \
+    && ln -s /usr/local/epics/softioc/db /db
+
 EXPOSE 5065 5064
 
-#CMD ["/usr/local/bin/start.sh"]
+#ENTRYPOINT ["/usr/local/bin/start.sh"]
