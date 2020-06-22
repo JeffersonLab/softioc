@@ -1,4 +1,4 @@
-FROM centos:8
+FROM centos:7
 
 # Defined in separate layer so it can be nested in another ENV
 ENV WORK_DIR=/usr/local/epics
@@ -9,8 +9,8 @@ ENV EPICS_VER=3.15.8 \
     EPICS_HOST_ARCH=linux-x86_64 \
     PATH=$PATH:$WORK_DIR/base/bin/linux-x86_64
 
-# Note: Perl complains about the locale a million times.   Can't figure out a way to tell it to shut up and just use en_us.UTF8
-RUN yum install -y wget gcc-c++ readline-devel perl-devel make \
+RUN yum install -y wget gcc-c++ readline-devel perl-devel make  \
+    #http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
     && wget --no-check-certificate https://www.aps.anl.gov/epics/download/base/base-$EPICS_VER.tar.gz \
     && tar -zxvf base-$EPICS_VER.tar.gz \
     && mkdir $WORK_DIR \
@@ -19,21 +19,23 @@ RUN yum install -y wget gcc-c++ readline-devel perl-devel make \
     && cd $WORK_DIR \
     && ln -s base-$EPICS_VER base \
     && cd $WORK_DIR/base \
-    && make
-
-RUN cd $WORK_DIR \
-    && mkdir softioc \
-    && cd softioc \
-    && $WORK_DIR/base/bin/linux-x86_64/makeBaseApp.pl -t ioc -a linux-x86_64 softioc \
-    && $WORK_DIR/base/bin/linux-x86_64/makeBaseApp.pl -i ioc -a linux-x86_64 softioc \
     && make \
+    #&& cd $WORK_DIR \
+    #&& mkdir softioc \
+    #&& cd softioc \
+    #&& $WORK_DIR/base/bin/linux-x86_64/makeBaseApp.pl -t ioc -a linux-x86_64 softioc \
+    #&& $WORK_DIR/base/bin/linux-x86_64/makeBaseApp.pl -i ioc -a linux-x86_64 softioc \
+    #&& make \
     && yum remove -y wget gcc-c++ readline-devel perl-devel make \
-    && echo "cd $WORK_DIR/softioc/iocBoot/softioc && ../../bin/linux-x86_64/softioc st.cmd" >> /usr/local/bin/start.sh \
-    && chmod +x /usr/local/bin/start.sh
-
-RUN mkdir /db \
+    && printf "#!/bin/bash \nsoftIoc -s -d /db/softioc.db" >> /usr/local/bin/start.sh \
+    #&& printf "#!/bin/bash \nprocServ -n 'Soft IOC' -i ^D^C 20000 /usr/local/bin/start.sh &> /dev/null" >> /usr/local/bin/init.sh \
+    && chmod +x /usr/local/bin/start.sh \
+    #&& chmod +x /usr/local/bin/init.sh \
+    && mkdir /db \
     && ln -s /usr/local/epics/softioc/db /db
+
+#RUN yum install -y procServ
 
 EXPOSE 5065 5064
 
-#ENTRYPOINT ["/usr/local/bin/start.sh"]
+ENTRYPOINT ["/usr/local/bin/start.sh"]

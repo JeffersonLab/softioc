@@ -1,6 +1,21 @@
 # softioc
 Docker image of an EPICS CA softioc
 
+## Usage
+Use a volume to provide your own IOC database (or use one of the provided examples) at the container mount point */db* by specifying a directory containing a file named _softioc.db_.  For example in your own project you could use Docker Compose to specify a softioc like so:
+```
+services:
+  softioc:
+    image: slominskir/softioc:1.0.0
+    hostname: softioc
+    container_name: softioc
+    ports:
+      - "5065:5065"
+    volumes:
+      - ./examples/hello:/db
+```
+
+
 ## Build
 ````
 docker build -t softioc .
@@ -10,7 +25,7 @@ docker build -t softioc .
 ```
 docker run --name softioc --rm -p 5064:5064 -p 5064:5064/udp -p 5065:5065 -p 5065:5065/udp -dit -v $(pwd)/examples/hello:/usr/local/epics/softioc/db softioc
 ```
-**Note**: On Windows the above volume bind command won't work.  Turns out there is no cross-platform way to specify a relative path with a bind mount [Docker CLI Issue 1203](https://github.com/docker/cli/issues/1203).  You must replace $(pwd) with the absolute path (or perhaps %cd%).  This problem is only with "docker run"; Docker compose doesn't have this issue.
+**Note**: Turns out there is no cross-platform way to specify a relative path with a bind mount [Docker CLI Issue 1203](https://github.com/docker/cli/issues/1203).  You may need to replace $(pwd) with the absolute path (or perhaps %cd% on Windows).  This problem is only with "docker run"; Docker compose doesn't have this issue.
 
 **Note**: Docker security measures may prevent bind mounts.  On Windows for example you must navigate to Settings > File Sharing then authorize the directory to mount.
 ## Monitor
