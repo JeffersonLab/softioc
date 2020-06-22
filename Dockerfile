@@ -19,7 +19,7 @@ RUN yum install -y wget gcc-c++ readline-devel perl-devel make  \
     && cd $WORK_DIR/base \
     && make \
     && yum remove -y wget gcc-c++ readline-devel perl-devel make \
-    && printf "#!/bin/bash \nsoftIoc -s -d /db/softioc.db" >> /usr/local/bin/start.sh \
+    && printf "#!/bin/sh \nsoftIoc -s -d /db/softioc.db" >> /usr/local/bin/start.sh \
     && chmod +x /usr/local/bin/start.sh \
     && mkdir /db \
     && ln -s /usr/local/epics/softioc/db /db
