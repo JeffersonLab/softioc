@@ -9,6 +9,8 @@ You can use a pre-built image from [DockerHub](https://hub.docker.com/r/slominsk
 services:
   softioc:
     image: slominskir/softioc:latest
+    tty: true
+    stdin_open: true
     hostname: softioc
     container_name: softioc
     ports:
