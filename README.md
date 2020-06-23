@@ -39,7 +39,7 @@ docker exec softioc caput hello 1
 ## Debug
 ```
 # If not running:
-docker run --entrypoint /bin/bash softioc
+docker run --entrypoint /bin/sh softioc
 # If already running:
-docker exec -it softioc /bin/bash
+docker exec -it softioc /bin/sh
 ```
