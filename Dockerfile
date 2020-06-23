@@ -19,19 +19,29 @@ RUN yum install -y wget gcc-c++ readline-devel perl-devel make  \
     && cd $WORK_DIR/base \
     && make \
     && yum remove -y wget gcc-c++ readline-devel perl-devel make \
-    && printf "#!/bin/sh \nsoftIoc -s -d /db/softioc.db" >> /usr/local/bin/start.sh \
-    && chmod +x /usr/local/bin/start.sh \
-    && mkdir /db \
-    && ln -s /usr/local/epics/softioc/db /db
+    && printf "#!/bin/sh \nsoftIoc -s -d /db/softioc.db" >> /usr/local/epics/start.sh \
+    && chmod +x /usr/local/epics/start.sh \
+    && mkdir /db
 
-# TODO: Slim image by 90% or so if we can figure out how to run on busybox (dynamic linked libc++ and others missing)
+# TODO: Slim image by 90% or so if we can figure out how to run on busybox (413MB -> ?)
+#RUN mkdir /deps \
+#   && cp --parents /lib64/libstdc++.so.6 /deps \
+#   && cp --parents /lib64/libm.so.6 /deps \
+#   && cp --parents /lib64/libgcc_s.so.1 /deps \
+#   && cp --parents /lib64/libc.so.6 /deps \
+#   && cp --parents /lib64/libpthread.so.0 /deps \
+#   && cp --parents /lib64/libreadline.so.6 /deps \
+#   && cp --parents /lib64/librt.so.1 /deps \
+#   && cp --parents /lib64/libdl.so.2 /deps \
+#   && cp --parents /lib64/ld-linux-x86-64.so.2 /deps \
+#   && cp --parents /lib64/libtinfo.so.5 /deps
+
 #FROM busybox:glibc
 #WORKDIR /usr/local/epics
 #COPY --from=builder /usr/local/epics .
-#WORKDIR /usr/local/bin
-#COPY --from=builder /usr/local/bin .
-
+#WORKDIR /
+#COPY --from=builder /deps/lib64/*.so.* /lib64/
 
 EXPOSE 5065 5064
 
-ENTRYPOINT ["/usr/local/bin/start.sh"]
+ENTRYPOINT ["/usr/local/epics/start.sh"]
