@@ -46,4 +46,7 @@ docker exec softioc caput hello 1
 docker run --entrypoint /bin/sh softioc
 # If already running:
 docker exec -it softioc /bin/sh
+# --OR attach to EPICS softIoc PID 1 entrypoint process directly
+docker attach softioc
+# To detach you must use escape sequence CTRL+p CTRL+q
 ```
