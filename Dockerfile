@@ -1,4 +1,4 @@
-FROM centos:7 AS builder
+FROM centos:7.8.2003 AS builder
 
 ENV WORK_DIR=/usr/local/epics
 
@@ -18,12 +18,9 @@ RUN yum install -y wget gcc-c++ readline-devel perl-devel make  \
     && ln -s base-$EPICS_VER base \
     && cd $WORK_DIR/base \
     && make \
-    && yum remove -y wget gcc-c++ readline-devel perl-devel make \
-    && printf "#!/bin/sh\nsoftIoc -s -d /db/softioc.db" >> /usr/local/epics/start.sh \
-    && chmod +x /usr/local/epics/start.sh \
-    && mkdir /db
+    && yum remove -y wget gcc-c++ readline-devel perl-devel make
 
-# Slim image by 90% or so if we can figure out how to run on busybox (413MB -> 49.5)
+# Slim image (413MB -> 49.5MB) by using busybox
 RUN mkdir /deps \
    && cp --parents /lib64/libstdc++.so.6 /deps \
    && cp --parents /lib64/libm.so.6 /deps \
@@ -33,7 +30,7 @@ RUN mkdir /deps \
    && cp --parents /lib64/libdl.so.2 /deps \
    && cp --parents /lib64/libtinfo.so.5 /deps
 
-FROM busybox:glibc
+FROM busybox:1.31.1-glibc
 
 ENV PATH=/usr/local/epics/base/bin/linux-x86_64:$PATH
 
@@ -44,4 +41,4 @@ COPY --from=builder /deps/lib64/*.so.* /lib64/
 
 EXPOSE 5065 5064
 
-ENTRYPOINT ["/usr/local/epics/start.sh"]
+ENTRYPOINT ["softIoc", "-d", "/db/softioc.db"]
