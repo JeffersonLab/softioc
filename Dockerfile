@@ -19,28 +19,28 @@ RUN yum install -y wget gcc-c++ readline-devel perl-devel make  \
     && cd $WORK_DIR/base \
     && make \
     && yum remove -y wget gcc-c++ readline-devel perl-devel make \
-    && printf "#!/bin/sh \nsoftIoc -s -d /db/softioc.db" >> /usr/local/epics/start.sh \
+    && printf "#!/bin/sh\nsoftIoc -s -d /db/softioc.db" >> /usr/local/epics/start.sh \
     && chmod +x /usr/local/epics/start.sh \
     && mkdir /db
 
-# TODO: Slim image by 90% or so if we can figure out how to run on busybox (413MB -> ?)
-#RUN mkdir /deps \
-#   && cp --parents /lib64/libstdc++.so.6 /deps \
-#   && cp --parents /lib64/libm.so.6 /deps \
-#   && cp --parents /lib64/libgcc_s.so.1 /deps \
-#   && cp --parents /lib64/libc.so.6 /deps \
-#   && cp --parents /lib64/libpthread.so.0 /deps \
-#   && cp --parents /lib64/libreadline.so.6 /deps \
-#   && cp --parents /lib64/librt.so.1 /deps \
-#   && cp --parents /lib64/libdl.so.2 /deps \
-#   && cp --parents /lib64/ld-linux-x86-64.so.2 /deps \
-#   && cp --parents /lib64/libtinfo.so.5 /deps
+# Slim image by 90% or so if we can figure out how to run on busybox (413MB -> 49.5)
+RUN mkdir /deps \
+   && cp --parents /lib64/libstdc++.so.6 /deps \
+   && cp --parents /lib64/libm.so.6 /deps \
+   && cp --parents /lib64/libgcc_s.so.1 /deps \
+   && cp --parents /lib64/libreadline.so.6 /deps \
+   && cp --parents /lib64/librt.so.1 /deps \
+   && cp --parents /lib64/libdl.so.2 /deps \
+   && cp --parents /lib64/libtinfo.so.5 /deps
 
-#FROM busybox:glibc
-#WORKDIR /usr/local/epics
-#COPY --from=builder /usr/local/epics .
-#WORKDIR /
-#COPY --from=builder /deps/lib64/*.so.* /lib64/
+FROM busybox:glibc
+
+ENV PATH=/usr/local/epics/base/bin/linux-x86_64:$PATH
+
+WORKDIR /usr/local/epics
+COPY --from=builder /usr/local/epics .
+WORKDIR /
+COPY --from=builder /deps/lib64/*.so.* /lib64/
 
 EXPOSE 5065 5064
 
