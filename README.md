@@ -25,7 +25,7 @@ docker build -t softioc .
 ```
 docker run --name softioc --rm -p 5064:5064 -p 5064:5064/udp -p 5065:5065 -p 5065:5065/udp -dit -v $(pwd)/examples/hello:/db softioc
 ```
-**Note**: Turns out there is no cross-platform way to specify a relative path with a bind mount [Docker CLI Issue 1203](https://github.com/docker/cli/issues/1203).  You may need to replace $(pwd) with the absolute path (or perhaps %cd% on Windows).  This problem is only with "docker run"; Docker compose doesn't have this issue.
+**Note**: Turns out there is no cross-platform way to specify a relative path with a bind mount ([Docker CLI Issue 1203](https://github.com/docker/cli/issues/1203)).  You may need to replace _$(pwd)_ with the absolute path (or perhaps _%cd%_ on Windows).  This problem is only with "docker run"; Docker compose doesn't have this issue.
 
 **Note**: Docker security measures may prevent bind mounts.  On Windows for example you must navigate to Settings > File Sharing then authorize the directory to mount.
 ## Monitor
