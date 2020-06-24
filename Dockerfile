@@ -18,7 +18,8 @@ RUN yum install -y wget gcc-c++ readline-devel perl-devel make  \
     && ln -s base-$EPICS_VER base \
     && cd $WORK_DIR/base \
     && make \
-    && yum remove -y wget gcc-c++ readline-devel perl-devel make
+    && yum remove -y wget gcc-c++ readline-devel perl-devel make \
+    && rm -rf $WORK_DIR/base/src
 
 # Slim image (413MB -> 49.5MB) by using busybox
 RUN mkdir /deps \
