@@ -1,5 +1,5 @@
 # softioc
-Docker image of an [EPICS CA](https://epics-controls.org/) softioc that uses BusyBox to slim image size to about 50MB.
+Docker image of an [EPICS CA](https://epics-controls.org/) softioc that uses BusyBox to slim image size to about 20MB.
 
 ## Usage
 Use a volume to provide your own IOC database (or use one of the provided examples) at the container mount point */db* by specifying a directory containing a file named _softioc.db_.  
