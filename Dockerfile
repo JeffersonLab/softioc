@@ -42,4 +42,5 @@ COPY --from=builder /deps/lib64/*.so.* /lib64/
 
 EXPOSE 5065 5064
 
-ENTRYPOINT ["softIoc", "-d", "/db/softioc.db"]
+ENTRYPOINT ["softIoc"]
+CMD ["-d", "/db/softioc.db"]
