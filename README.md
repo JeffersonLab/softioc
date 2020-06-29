@@ -7,13 +7,14 @@ Docker image of an [EPICS CA](https://epics-controls.org/) softioc that uses Bus
 docker pull slominskir/softioc
 docker image tag slominskir/softioc softioc
 ````
+Image hosted on [DockerHub](https://hub.docker.com/r/slominskir/softioc)
 ### Build
 ````
 git clone https://github.com/JeffersonLab/softioc.git
 cd softioc
 docker build -t softioc .
 ````
-### Docker Run
+### Run
 The container entrypoint is the softIoc application and the default arguments instruct the IOC to use the database from the bind mount point */db* containing a file named _softioc.db_.  Use a volume to provide your own IOC database (or use one of the provided examples) at this mount point: 
 ```
 docker run --name softioc -it -v $(pwd)/examples/hello:/db softioc
@@ -31,8 +32,8 @@ docker run --name softioc -it -v $(pwd)/examples/hello:/db -p 5064:5064/tcp -p 5
 
 **Note**: Docker security measures may prevent bind mounts.  On Windows for example you must navigate to Settings > File Sharing then authorize the directory to mount.
 
-### Docker Compose
-You can use a pre-built image from [DockerHub](https://hub.docker.com/r/slominskir/softioc).  For example in your own project you could specify a softioc like so:
+### Compose
+In your own project you could specify a softioc like so in a **docker-compose.yml** file:
 ```
 services:
   softioc:
