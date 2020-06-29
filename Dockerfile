@@ -40,7 +40,8 @@ COPY --from=builder /usr/local/epics .
 WORKDIR /
 COPY --from=builder /deps/lib64/*.so.* /lib64/
 
-EXPOSE 5065 5064
+EXPOSE 5065/tcp 5064/tcp
+EXPOSE 5065/udp 5064/udp
 
 ENTRYPOINT ["softIoc"]
 CMD ["-d", "/db/softioc.db"]
