@@ -43,10 +43,10 @@ services:
     hostname: softioc
     container_name: softioc
     ports:
-      - "5065/tcp:5065/tcp"
-      - "5064/tcp:5064/tcp"
-      - "5065/udp:5065/udp"
-      - "5064/udp:5064/udp"
+      - "5065:5065/tcp"
+      - "5064:5064/tcp"
+      - "5065:5065/udp"
+      - "5064:5064/udp"
     volumes:
       - ./examples/hello:/db
 ```
