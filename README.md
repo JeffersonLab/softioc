@@ -2,6 +2,17 @@
 Docker image of an [EPICS CA](https://epics-controls.org/) softioc that uses BusyBox to slim image size to about 20MB.
 
 ## Usage
+### Pull
+````
+docker pull slominskir/softioc
+docker image tag slominskir/softioc softioc
+````
+### Build
+````
+git clone https://github.com/JeffersonLab/softioc.git
+cd softioc
+docker build -t softioc .
+````
 ### Docker Run
 The container entrypoint is the softIoc application and the default arguments instruct the IOC to use the database from the bind mount point */db* containing a file named _softioc.db_.  Use a volume to provide your own IOC database (or use one of the provided examples) at this mount point: 
 ```
@@ -38,13 +49,6 @@ services:
     volumes:
       - ./examples/hello:/db
 ```
-
-
-## Build
-````
-docker build -t softioc .
-````
-
 ## Monitor
 ```
 docker exec -it softioc camonitor hello
