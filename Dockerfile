@@ -21,7 +21,7 @@ RUN yum install -y wget gcc-c++ readline-devel perl-devel make  \
     && yum remove -y wget gcc-c++ readline-devel perl-devel make \
     && rm -rf $WORK_DIR/base/src
 
-# Slim image (413MB -> 49.5MB) by using busybox
+# Slim image (~400MB -> ~20MB) by using busybox
 RUN mkdir /deps \
    && cp --parents /lib64/libstdc++.so.6 /deps \
    && cp --parents /lib64/libm.so.6 /deps \
