@@ -16,7 +16,7 @@ docker run --name softioc -it -v /some/where/else:/db softioc -m user=pklaus -d 
 **Note**: Docker security measures may prevent bind mounts.  On Windows for example you must navigate to Settings > File Sharing then authorize the directory to mount.
 
 ### Docker Compose
-You can use a pre-built image from [DockerHub](https://hub.docker.com/r/slominskir/softioc).  For example in your own project you could use Docker Compose to specify a softioc like so:
+You can use a pre-built image from [DockerHub](https://hub.docker.com/r/slominskir/softioc).  For example in your own project you could specify a softioc like so:
 ```
 services:
   softioc:
