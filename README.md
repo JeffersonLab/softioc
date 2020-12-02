@@ -1,4 +1,4 @@
-# softioc
+# softioc [![Docker Image Version (latest semver)](https://img.shields.io/docker/v/slominskir/softioc?sort=semver)](https://hub.docker.com/repository/docker/slominskir/softioc)
 Docker image of an [EPICS CA](https://epics-controls.org/) softioc that uses BusyBox to slim image size to about 20MB.
 
 ## Usage
