@@ -1,21 +1,43 @@
-# softioc [![Docker Image Version (latest semver)](https://img.shields.io/docker/v/slominskir/softioc?sort=semver)](https://hub.docker.com/r/slominskir/softioc)
+# softioc [![Docker](https://img.shields.io/docker/v/jeffersonlab/softioc?sort=semver&label=DockerHub)](https://hub.docker.com/r/jeffersonlab/softioc)
 Docker image of an [EPICS CA](https://epics-controls.org/) softioc that uses BusyBox to slim image size to about 20MB.
 
-## Usage
-### Pull
-````
-docker pull slominskir/softioc
-docker image tag slominskir/softioc softioc
-````
-Image hosted on [DockerHub](https://hub.docker.com/r/slominskir/softioc)
-### Build
-````
-git clone https://github.com/JeffersonLab/softioc.git
+---
+- [Overview](https://github.com/JeffersonLab/softioc#overview)
+- [Quick Start with Compose](https://github.com/JeffersonLab/softioc#quick-start-with-compose)
+- [Install](https://github.com/JeffersonLab/softioc#install)
+- [Configure](https://github.com/JeffersonLab/softioc#configure)
+- [Build](https://github.com/JeffersonLab/softioc#build)
+- [Release](https://github.com/JeffersonLab/softioc#release)
+---
+
+## Overview
+
+## Quick Start with Compose
+1. Grab project
+```
+git clone https://github.com/JeffersonLab/softioc
 cd softioc
-docker build -t softioc .
-````
-### Run
-The container entrypoint is the softIoc application and the default arguments instruct the IOC to use the database from the bind mount point */db* containing a file named _softioc.db_.  Use a volume to provide your own IOC database (or use one of the provided examples) at this mount point: 
+```
+2. Launch Docker
+```
+docker compose up
+```
+3. Monitor for PV named hello
+```
+docker exec -it softioc camonitor hello
+```
+4. CAPUT value to hello
+```
+docker exec softioc caput hello 1
+```
+
+## Install
+```
+docker pull jeffersonlab/softioc
+```
+
+## Configure
+The container entrypoint is the softIoc application and the default arguments instruct the IOC to use the database from the bind mount point */db* containing a file named _softioc.db_.  Use a volume to provide your own IOC database (or use one of the provided examples) at this mount point:
 ```
 docker run --name softioc -it -v $(pwd)/examples/hello:/db softioc
 ```
@@ -32,33 +54,7 @@ docker run --name softioc -it -v $(pwd)/examples/hello:/db -p 5064:5064/tcp -p 5
 
 **Note**: Docker security measures may prevent bind mounts.  On Windows for example you must navigate to Settings > File Sharing then authorize the directory to mount.
 
-### Compose
-In your own project you could specify a softioc like so in a **docker-compose.yml** file:
-```
-services:
-  softioc:
-    image: slominskir/softioc:latest
-    tty: true
-    stdin_open: true
-    hostname: softioc
-    container_name: softioc
-    ports:
-      - "5065:5065/tcp"
-      - "5064:5064/tcp"
-      - "5065:5065/udp"
-      - "5064:5064/udp"
-    volumes:
-      - ./examples/hello:/db
-```
-## Monitor
-```
-docker exec -it softioc camonitor hello
-```
-## Put
-```
-docker exec softioc caput hello 1
-```
-## Debug
+**Debug tips**:
 ```
 # If not running:
 docker run --entrypoint /bin/sh softioc
@@ -68,3 +64,15 @@ docker exec -it softioc /bin/sh
 docker attach softioc
 # To detach you must use escape sequence CTRL+p CTRL+q
 ```
+
+## Build
+```
+git clone https://github.com/JeffersonLab/softioc.git
+cd softioc
+docker build -t softioc .
+```
+
+## Release
+1. Run docker build and tag release
+2. Push to DockerHub
+
