@@ -11,6 +11,7 @@ Docker image of an [EPICS CA](https://epics-controls.org/) softioc that uses Bus
 ---
 
 ## Overview
+The container currently uses EPICS version 3.15.8.
 
 ## Quick Start with Compose
 1. Grab project
