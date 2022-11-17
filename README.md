@@ -19,7 +19,7 @@ The container currently uses EPICS version 3.15.8.
 git clone https://github.com/JeffersonLab/softioc
 cd softioc
 ```
-2. Launch Docker
+2. Launch [Compose](https://github.com/docker/compose)
 ```
 docker compose up
 ```
